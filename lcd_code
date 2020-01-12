@@ -1,0 +1,51 @@
+ORG 0000H;assembler directive
+MOV A,#38H;Move 38 Hexadesimmal value in the accumulator(2 line and
+5*7 matrix)
+ACALL CMNWRT; CMNWRT Subroutine
+acalldelay;delaysubroutine
+mov a,#0eh;display on,cursour blinking
+ACALL CMNWRT;CMNWRTSubroutine
+acalldelay;delay subroutine
+mov a,#01h;Clear display screen
+acallcmnwrt;CMNWRT Subroutine
+acalldelay;delay subroutine
+mov a,#06h;Shift cursour to right
+acallcmnwrt;CMNWRT Subroutine
+acalldelay;delay subroutine
+mov a,#80h;Start writing from first line
+acallcmnwrt;CMNWRT Subroutine
+acalldelay;delay subroutine
+mov a,#'V';Mov 'V' value in the accumulator
+acalldatwrt;datawrt Subroutine
+acalldelay;delay subroutine
+mov a,#'I';Mov 'I' value in the accumulator
+acalldatwrt;datawrt Subroutine
+acalldelay;delay subroutine
+xx
+mov a,#'T';Mov 'T' value in the accumulator
+acalldatwrt;datawrt Subroutine
+acalldelay;delay subroutine
+again:sjmp again
+cmnwrt:
+mov p1,a;move the content of accumulator in port P1(P1 is connected with
+D0-D7)
+clr p0.2;Command register of Register select bit
+clr p0.1;Clear the R/W bit(for write operation)
+setb p0.0;high to low enable
+clr p0.0
+ret;return to the main code
+datwrt:
+mov p1,a
+setb p0.2;data register
+clr p0.1
+setb p0.0
+clr p0.0
+ret
+delay:mov r3,#0ffh
+mov r4,#0ffh
+mov r5,#55h
+here:djnz r5,here
+here1:djnz r4,here1
+here2:djnz r3,here2
+ret
+end
